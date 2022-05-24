@@ -6,13 +6,26 @@
 
 namespace logger{
 
-// Log to console window
-template<typename T>
-static void LogStat(const T& msg) {
-  std::cout << "LOG: " << msg << std::endl;
+// Log to console window --------------------------------------------------------------------------
+
+// Add space with a partition in console
+static void LogSpace() {
+  std::cout << "\n-------------------------------------------\n";
 }
 
-// Check if return value is valid for socket functions
+// Log in the same line
+template<typename T>
+static void LogInline(const T& msg) {
+  std::cout << "LOG: " << msg;
+}
+
+// Log and move to the next line
+template<typename T>
+static void Log(const T& msg) {
+  std::cout << msg << std::endl;
+}
+
+// Check if return value is valid for socket functions ---------------------------------------------
 static int CheckValidity(const std::string& function_name, const int& return_value) {
   if (return_value < 0) {
     std::cout << "\nERROR: Return value for function " << function_name << " is less than ZERO\n";

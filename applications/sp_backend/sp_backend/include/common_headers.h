@@ -7,3 +7,4 @@
 // Other common headers
 #include <iostream>
 #include <string>
+#include <vector>

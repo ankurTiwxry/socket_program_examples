@@ -1,7 +1,7 @@
 #include "../include/socket_initializer.h"
 
 socket_initializer::socket_initializer() 
-  : cs_ui_socket_fd{0}, web_ui_socket_fd{0}
+  : wpf_ui_recv_socket_fd{0}, wpf_ui_send_socket_fd{0}
 {
   logger::CheckValidity("WSA Startup", WSAStartup(MAKEWORD(2, 2), &ws));
   SetupUiSockets();
@@ -11,10 +11,26 @@ socket_initializer::~socket_initializer() {
   WSACleanup();
 }
 
+// getters
+struct return_parameters& socket_initializer::GetWpfUiRecvSocket() {
+  ret.socket_fd = wpf_ui_recv_socket_fd;
+  ret.sockaddr = wpf_ui_recv_sockaddr;
+  return ret;
+}
+
+struct return_parameters& socket_initializer::GetWpfUiSendSocket() {
+  ret.socket_fd = wpf_ui_recv_socket_fd;
+  ret.sockaddr = wpf_ui_recv_sockaddr;
+  return ret;
+}
+
+
 // wrapper functions
 void socket_initializer::SetupUiSockets() {
-
+  CreateUdpRecvSocket("WPF UI Recv Socket", wpf_ui_recv_socket_fd, 10000, wpf_ui_recv_sockaddr);
+  CreateUdpSendSocket("WPF UI Send Socket", wpf_ui_send_socket_fd, 10000, "127.0.0.1", wpf_ui_send_sockaddr);
 }
+
 
 // create udp sockets template ----------------------------------------------------------------------------------------------------------
 void socket_initializer::CreateUdpRecvSocket(const std::string& name, int& socket_fd, const int& port, struct sockaddr_in& sock_addr) {
