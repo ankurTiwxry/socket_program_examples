@@ -12,17 +12,17 @@ socket_initializer::~socket_initializer() {
 }
 
 // getters
-struct return_parameters& socket_initializer::GetWpfUiRecvSocket() {
-  ret.socket_fd = wpf_ui_recv_socket_fd;
-  ret.sockaddr = wpf_ui_recv_sockaddr;
-  return ret;
-}
-
-struct return_parameters& socket_initializer::GetWpfUiSendSocket() {
-  ret.socket_fd = wpf_ui_recv_socket_fd;
-  ret.sockaddr = wpf_ui_recv_sockaddr;
-  return ret;
-}
+//struct return_parameters& socket_initializer::GetWpfUiRecvSocket() {
+//  ret.socket_fd = wpf_ui_recv_socket_fd;
+//  ret.sock_addr = wpf_ui_recv_sockaddr;
+//  return ret;
+//}
+//
+//struct return_parameters& socket_initializer::GetWpfUiSendSocket() {
+//  ret.socket_fd = wpf_ui_recv_socket_fd;
+//  ret.sock_addr = wpf_ui_recv_sockaddr;
+//  return ret;
+//}
 
 
 // wrapper functions

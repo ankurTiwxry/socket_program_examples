@@ -5,7 +5,7 @@
 
 struct return_parameters {
   int socket_fd;
-  struct sockaddr_in sockaddr;
+  struct sockaddr_in sock_addr;
 };
 
 class socket_initializer 
@@ -15,8 +15,8 @@ public:
   ~socket_initializer();
 
   // getters
-  struct return_parameters& GetWpfUiRecvSocket();
-  struct return_parameters& GetWpfUiSendSocket();
+  //struct return_parameters& GetWpfUiRecvSocket();
+  //struct return_parameters& GetWpfUiSendSocket();
 
 private:
   // variables
