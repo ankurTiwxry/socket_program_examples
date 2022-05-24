@@ -124,7 +124,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="source\constants.cpp" />
-    <ClCompile Include="source\logging.cpp" />
     <ClCompile Include="source\main.cpp" />
     <ClCompile Include="source\socket_initializer.cpp" />
   </ItemGroup>
