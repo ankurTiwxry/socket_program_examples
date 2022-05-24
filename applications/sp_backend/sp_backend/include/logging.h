@@ -4,9 +4,28 @@
 #include <string>
 #include <fstream>
 
+namespace logger{
+
+// Log to console window
+template<typename T>
+static void LogStat(const T& msg) {
+  std::cout << "LOG: " << msg << std::endl;
+}
+
+// Check if return value is valid for socket functions
+static int CheckValidity(const std::string& function_name, const int& return_value) {
+  if (return_value < 0) {
+    std::cout << "\nERROR: Return value for function " << function_name << " is less than ZERO\n";
+    return -1;
+  }
+  return 0;
+}
+
+// ---------------------------------------------------------------------------------------------------
+
+// LOG to file Class definition
 template<typename T>
 class logging {
-
 public:
 
   // ctor
@@ -19,20 +38,17 @@ public:
     output_file.close();
   }
 
-  // log in console window 
-  void Log(const T& msg) {
-    std::cout << msg << std::endl;
-  }
-
-  // log to file
   void LogToFile(const T& msg) {
-    output_file << msg << std::endl;
     std::cout << "LOG: " << msg << std::endl;
+    output_file << "LOG: " << msg << std::endl;
   }
-
 
 private:
   std::ofstream output_file;
-
 };
+
+
+
+}
+
 
