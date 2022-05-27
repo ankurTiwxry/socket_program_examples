@@ -3,9 +3,17 @@
 #include "common_headers.h"
 #include "logging.h"
 
-struct return_parameters {
-  int socket_fd;
-  struct sockaddr_in sock_addr;
+struct udp_socket_parameters {
+  int m_send_socket_fd;
+  int m_recv_socket_fd;
+  struct sockaddr_in m_send_sock_addr;
+  struct sockaddr_in m_recv_sock_addr;
+
+  udp_socket_parameters(int send_socket_fd, struct sockaddr_in send_sock_addr, int recv_socket_fd, struct sockaddr_in recv_sock_addr) 
+  : m_send_socket_fd{send_socket_fd}, m_send_sock_addr{send_sock_addr}, m_recv_socket_fd{recv_socket_fd}, m_recv_sock_addr{recv_sock_addr} 
+  {
+    logger::Log("New Udp Socket Created");
+  }
 };
 
 class socket_initializer 
@@ -15,31 +23,21 @@ public:
   ~socket_initializer();
 
   // getters
-  //struct return_parameters& GetWpfUiRecvSocket();
-  //struct return_parameters& GetWpfUiSendSocket();
+  std::vector<udp_socket_parameters> GetUdpSocketParameters();
 
 private:
   // variables
   WSAData ws;
 
-  // socket file descriptors
-  int wpf_ui_send_socket_fd;
-  int wpf_ui_recv_socket_fd;
-
-  // sock address structs
-  struct sockaddr_in wpf_ui_send_sockaddr;
-  struct sockaddr_in wpf_ui_recv_sockaddr;
-
-  // return parameters
-  struct return_parameters ret;
+  // dynamic list of sockets with all necessary parameters
+  std::vector<udp_socket_parameters> udp_sockets;
 
   // functions
   // wrapper functions
   void SetupUiSockets();
 
   // templates to create sockets
-  void CreateUdpRecvSocket(const std::string& name, int& socket_fd, const int& port, struct sockaddr_in& sock_addr);
-  void CreateUdpSendSocket(const std::string& name, int& socket_fd, const int& port, const std::string& ip_address, struct sockaddr_in& sock_addr);
+  void CreateUdpSocket(const std::string& name, const int& port, const std::string& ip_address);
 
 };
 

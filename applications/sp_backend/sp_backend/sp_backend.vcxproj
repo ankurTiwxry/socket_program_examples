@@ -126,6 +126,7 @@
     <ClCompile Include="source\network_services.cpp" />
     <ClCompile Include="source\main.cpp" />
     <ClCompile Include="source\socket_initializer.cpp" />
+    <ClCompile Include="source\ui_service.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\common_headers.h" />
@@ -133,6 +134,7 @@
     <ClInclude Include="include\logging.h" />
     <ClInclude Include="include\socket_initializer.h" />
     <ClInclude Include="include\network_services.h" />
+    <ClInclude Include="include\ui_service.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,8 +1,11 @@
 #include "../include/socket_initializer.h"
 
-socket_initializer::socket_initializer() 
-  : wpf_ui_recv_socket_fd{0}, wpf_ui_send_socket_fd{0}
+socket_initializer::socket_initializer()
 {
+  // set up sockets array
+  udp_sockets.clear();
+
+  // wsa variable check
   logger::CheckValidity("WSA Startup", WSAStartup(MAKEWORD(2, 2), &ws));
   SetupUiSockets();
 }
@@ -11,53 +14,46 @@ socket_initializer::~socket_initializer() {
   WSACleanup();
 }
 
-// getters
-//struct return_parameters& socket_initializer::GetWpfUiRecvSocket() {
-//  ret.socket_fd = wpf_ui_recv_socket_fd;
-//  ret.sock_addr = wpf_ui_recv_sockaddr;
-//  return ret;
-//}
-//
-//struct return_parameters& socket_initializer::GetWpfUiSendSocket() {
-//  ret.socket_fd = wpf_ui_recv_socket_fd;
-//  ret.sock_addr = wpf_ui_recv_sockaddr;
-//  return ret;
-//}
-
-
 // wrapper functions
 void socket_initializer::SetupUiSockets() {
-  CreateUdpRecvSocket("WPF UI Recv Socket", wpf_ui_recv_socket_fd, 10000, wpf_ui_recv_sockaddr);
-  CreateUdpSendSocket("WPF UI Send Socket", wpf_ui_send_socket_fd, 10000, "127.0.0.1", wpf_ui_send_sockaddr);
+
 }
 
 
-// create udp sockets template ----------------------------------------------------------------------------------------------------------
-void socket_initializer::CreateUdpRecvSocket(const std::string& name, int& socket_fd, const int& port, struct sockaddr_in& sock_addr) {
+void socket_initializer::CreateUdpSocket(const std::string& name, const int& port, const std::string& ip_address) {
   
-  // create socket file descriptor
-  socket_fd = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
-  logger::CheckValidity(name + " : socket()", socket_fd);
+  // set up udp_sockets array
+  udp_sockets.clear();
+  udp_sockets.reserve(udp_sockets.size() + 1);
+  // SEND SOCKET
+  // create socket
+  int send_socket_fd = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
+  logger::CheckValidity(name + " : send : socket()", send_socket_fd);
+  // socket address structure 
+  struct sockaddr_in send_socket_addr;
+  send_socket_addr.sin_family = AF_INET;
+  send_socket_addr.sin_port = htons(port);
+  send_socket_addr.sin_addr.s_addr = inet_addr(ip_address.c_str());
+  memset(&(send_socket_addr.sin_zero), 0, sizeof(sockaddr));
 
-  // socket address struct values
-  sock_addr.sin_family = AF_INET;
-  sock_addr.sin_port = htons(port);
-  sock_addr.sin_addr.s_addr = INADDR_ANY;
-  memset(&(sock_addr.sin_zero), 0, sizeof(sockaddr));
-
-  // bind to socket file descriptor with socket address struct
-  logger::CheckValidity(name + " : Bind()", bind(socket_fd, (sockaddr*)&sock_addr, sizeof(sock_addr)));
+  // RECV SOCKET
+  // create socket
+  int recv_socket_fd = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
+  logger::CheckValidity(name + " : recv : socket()", recv_socket_fd);
+  // socket address structure 
+  struct sockaddr_in recv_socket_addr;
+  recv_socket_addr.sin_family = AF_INET;
+  recv_socket_addr.sin_port = htons(port);
+  recv_socket_addr.sin_addr.s_addr = inet_addr(ip_address.c_str());
+  memset(&(recv_socket_addr.sin_zero), 0, sizeof(sockaddr));
+  // bind socket file descriptor with socket address structure
+  logger::CheckValidity(name + " : recv : bind()", bind(recv_socket_fd, (sockaddr*)&recv_socket_addr, sizeof(recv_socket_addr)));
+  
+  // assign values to next index of udp_sockets array
+  struct udp_socket_parameters socket(send_socket_fd, send_socket_addr, recv_socket_fd, recv_socket_addr);
+  udp_sockets.push_back(socket);
 }
 
-void socket_initializer::CreateUdpSendSocket(const std::string& name, int& socket_fd, const int&port, const std::string& ip_address, struct sockaddr_in& sock_addr) {
-
-  // create socket file descriptor
-  socket_fd = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
-  logger::CheckValidity(name + " : socket()", socket_fd);
-
-  // socket address struct values
-  sock_addr.sin_family = AF_INET;
-  sock_addr.sin_port = htons(port);
-  sock_addr.sin_addr.s_addr = inet_addr(ip_address.c_str());
-  memset(&(sock_addr.sin_zero), 0, sizeof(sockaddr));
+std::vector<udp_socket_parameters> socket_initializer::GetUdpSocketParameters() {
+  return udp_sockets;
 }
