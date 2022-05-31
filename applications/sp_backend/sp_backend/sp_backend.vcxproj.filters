@@ -38,13 +38,13 @@
     <ClInclude Include="include\socket_initializer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\common_headers.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\network_services.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\ui_service.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\network_utility.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

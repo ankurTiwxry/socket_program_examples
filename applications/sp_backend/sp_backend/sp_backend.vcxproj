@@ -129,7 +129,7 @@
     <ClCompile Include="source\ui_service.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\common_headers.h" />
+    <ClInclude Include="include\network_utility.h" />
     <ClInclude Include="include\constants.h" />
     <ClInclude Include="include\logging.h" />
     <ClInclude Include="include\socket_initializer.h" />

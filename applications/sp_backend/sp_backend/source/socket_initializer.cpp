@@ -19,7 +19,7 @@ socket_initializer::~socket_initializer() {
 // wrapper functions
 void socket_initializer::SetupUiSockets() {
   logger::Log("Setup UI Sockets");
-  CreateUdpSocket("Wpf Ui 1", 25005, "127.0.0.1"); 
+  CreateUdpSocket("WPF UI 1", 25005, "127.0.0.1");
 }
 
 void socket_initializer::CreateUdpSocket(const std::string& name, const int& port, const std::string& ip_address) {
