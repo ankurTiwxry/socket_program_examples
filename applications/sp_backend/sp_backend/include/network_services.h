@@ -9,13 +9,13 @@
 class network_services {
 public:
   network_services(const std::vector<udp_socket_parameters>& initialized_udp_sockets);
-  void MainService();
+  int FindActiveSourceUi();
 
 protected:
 
   // pure virtual functions
-  virtual void SendMsg() {}
-  virtual void RecvMsg() {}
+  virtual void SendMsg(unsigned int index) {}
+  virtual void RecvMsg(unsigned int index) {}
 
   // variables
   std::vector<udp_socket_parameters> udp_sockets;
@@ -28,7 +28,7 @@ private:
   // functions
   void FindMaxFdValue();
   void SetupReadFds();
-  int FindMsgSource();
+  int FindActiveSourceUiIndex();
 
 };
 

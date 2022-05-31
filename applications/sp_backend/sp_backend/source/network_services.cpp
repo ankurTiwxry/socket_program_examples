@@ -3,14 +3,13 @@
 network_services::network_services(const std::vector<udp_socket_parameters>& initialized_udp_sockets) {
   // get all varaibles here
   udp_sockets = initialized_udp_sockets;
-
 }
 
 // public functions
-void network_services::MainService() {
+int network_services::FindActiveSourceUi() {
   FindMaxFdValue();
   SetupReadFds();
-  FindMsgSource();
+  return FindActiveSourceUiIndex();
 }
 
 // private functions
@@ -29,7 +28,7 @@ void network_services::SetupReadFds() {
   }
 }
 
-int network_services::FindMsgSource() {
+int network_services::FindActiveSourceUiIndex() {
   // select active file descriptor which can read
   select(max_fd + 1, &read_fds, NULL, NULL, NULL);
   // find index of Ui socket that is active

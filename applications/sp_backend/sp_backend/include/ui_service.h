@@ -5,8 +5,8 @@
 class ui_service : public network_services {
 
 public:
-  void SendMsg();
-  void RecvMsg();
+  void SendMsg(unsigned int index);
+  void RecvMsg(unsigned int index);
 
 private:
   
