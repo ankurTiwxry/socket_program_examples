@@ -3,11 +3,19 @@
 socket_initializer::socket_initializer()
 {
   // set up sockets array
-  udp_sockets.clear();
-
   // wsa variable check
-  logger::CheckValidity("WSA Startup", WSAStartup(MAKEWORD(2, 2), &ws));
+  logger::Log(udp_sockets.size());
+  logger::CheckValidity("WSA Startup ", WSAStartup(MAKEWORD(2, 2), &ws));
   SetupUiSockets();
+
+  logger::Log(udp_sockets.size());
+  for (unsigned int i = 0; i < udp_sockets.size(); i++) {
+  // temp func : check assigned values
+    logger::LogSpace();
+    logger::LogInline("Udp Socket     : "); logger::Log(i+1);  
+    logger::LogInline("Send Socket FD : "); logger::Log(udp_sockets[i].m_send_socket_fd);
+    logger::LogInline("Recv Socket FD : "); logger::Log(udp_sockets[i].m_recv_socket_fd);
+  }
 }
 
 socket_initializer::~socket_initializer() {
@@ -16,44 +24,41 @@ socket_initializer::~socket_initializer() {
 
 // wrapper functions
 void socket_initializer::SetupUiSockets() {
-
+  logger::Log("Setup UI Sockets");
+  CreateUdpSocket("Wpf Ui 1", 25005, "127.0.0.1"); 
 }
 
 
 void socket_initializer::CreateUdpSocket(const std::string& name, const int& port, const std::string& ip_address) {
-  
-  // set up udp_sockets array
-  udp_sockets.clear();
-  udp_sockets.reserve(udp_sockets.size() + 1);
-  // SEND SOCKET
-  // create socket
-  int send_socket_fd = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
-  logger::CheckValidity(name + " : send : socket()", send_socket_fd);
-  // socket address structure 
-  struct sockaddr_in send_socket_addr;
-  send_socket_addr.sin_family = AF_INET;
-  send_socket_addr.sin_port = htons(port);
-  send_socket_addr.sin_addr.s_addr = inet_addr(ip_address.c_str());
-  memset(&(send_socket_addr.sin_zero), 0, sizeof(sockaddr));
-
-  // RECV SOCKET
-  // create socket
-  int recv_socket_fd = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
-  logger::CheckValidity(name + " : recv : socket()", recv_socket_fd);
-  // socket address structure 
-  struct sockaddr_in recv_socket_addr;
-  recv_socket_addr.sin_family = AF_INET;
-  recv_socket_addr.sin_port = htons(port);
-  recv_socket_addr.sin_addr.s_addr = inet_addr(ip_address.c_str());
-  memset(&(recv_socket_addr.sin_zero), 0, sizeof(sockaddr));
-  // bind socket file descriptor with socket address structure
-  logger::CheckValidity(name + " : recv : bind()", bind(recv_socket_fd, (sockaddr*)&recv_socket_addr, sizeof(recv_socket_addr)));
-  
-  // assign values to next index of udp_sockets array
-  struct udp_socket_parameters socket(send_socket_fd, send_socket_addr, recv_socket_fd, recv_socket_addr);
-  udp_sockets.push_back(socket);
+  udp_sockets.resize(udp_sockets.size() + 1);
+  logger::Log("Creating UDP socket to send and receive from " + name);
+  CreateUdpRecvSocket(25005);
+  //CreateUdpSendSocket(25006, ip_address);
 }
 
-std::vector<udp_socket_parameters> socket_initializer::GetUdpSocketParameters() {
-  return udp_sockets;
+void socket_initializer::CreateUdpRecvSocket(const int& port) {
+  int i = udp_sockets.size() - 1;
+  udp_sockets[i].m_recv_socket_fd = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
+  logger::CheckValidity("Recv : socket()", udp_sockets[i].m_recv_socket_fd);
+
+  udp_sockets[i].m_recv_sock_addr.sin_family = AF_INET;
+  udp_sockets[i].m_recv_sock_addr.sin_port = htons(25005);
+  udp_sockets[i].m_recv_sock_addr.sin_addr.s_addr = INADDR_ANY;
+  memset(&(udp_sockets[i].m_recv_sock_addr.sin_zero), 0, sizeof(udp_sockets[i].m_recv_sock_addr));
+
+  logger::Log(logger::CheckValidity("Recv : bind()", bind(udp_sockets[i].m_recv_socket_fd, (struct sockaddr*)&udp_sockets[i].m_recv_sock_addr, sizeof(udp_sockets[i].m_recv_sock_addr))));
 }
+
+void socket_initializer::CreateUdpSendSocket(const int& port, const std::string& ip_address) {
+  int i = udp_sockets.size() - 1;
+  udp_sockets[i].m_send_socket_fd = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
+  logger::CheckValidity("Send : socket()", udp_sockets[i].m_send_socket_fd);
+
+  udp_sockets[i].m_send_sock_addr.sin_family = AF_INET;
+  udp_sockets[i].m_send_sock_addr.sin_port = htons(25006);
+  udp_sockets[i].m_send_sock_addr.sin_addr.s_addr = inet_addr(ip_address.c_str());
+  memset(&(udp_sockets[i].m_send_sock_addr.sin_zero), 0, sizeof(udp_sockets[i].m_send_sock_addr));
+}
+
+
+

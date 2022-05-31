@@ -9,11 +9,11 @@ struct udp_socket_parameters {
   struct sockaddr_in m_send_sock_addr;
   struct sockaddr_in m_recv_sock_addr;
 
-  udp_socket_parameters(int send_socket_fd, struct sockaddr_in send_sock_addr, int recv_socket_fd, struct sockaddr_in recv_sock_addr) 
+  /*udp_socket_parameters(int send_socket_fd, struct sockaddr_in send_sock_addr, int recv_socket_fd, struct sockaddr_in recv_sock_addr) 
   : m_send_socket_fd{send_socket_fd}, m_send_sock_addr{send_sock_addr}, m_recv_socket_fd{recv_socket_fd}, m_recv_sock_addr{recv_sock_addr} 
   {
-    logger::Log("New Udp Socket Created");
-  }
+    logger::Log("udp_socket_parameters constructor called");
+  }*/
 };
 
 class socket_initializer 
@@ -23,14 +23,18 @@ public:
   ~socket_initializer();
 
   // getters
-  std::vector<udp_socket_parameters> GetUdpSocketParameters();
+  std::vector<udp_socket_parameters> GetUdpSocketParameters() {
+    return udp_sockets; 
+  }
 
 private:
   // variables
   WSAData ws;
-
+  
   // dynamic list of sockets with all necessary parameters
   std::vector<udp_socket_parameters> udp_sockets;
+
+  // temporary variables
 
   // functions
   // wrapper functions
@@ -38,6 +42,8 @@ private:
 
   // templates to create sockets
   void CreateUdpSocket(const std::string& name, const int& port, const std::string& ip_address);
+  void CreateUdpSendSocket(const int& port, const std::string& ip_address);
+  void CreateUdpRecvSocket(const int& port);
 
 };
 

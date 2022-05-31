@@ -29,7 +29,7 @@ static void Log(const T& msg) {
 static int CheckValidity(const std::string& function_name, const int& return_value) {
   if (return_value < 0) {
     std::cout << "\nERROR: Return value for function " << function_name << " is less than ZERO\n";
-    return -1;
+    return return_value;
   }
   return 0;
 }
