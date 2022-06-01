@@ -135,6 +135,7 @@
     <ClInclude Include="include\socket_initializer.h" />
     <ClInclude Include="include\network_services.h" />
     <ClInclude Include="include\ui_service.h" />
+    <ClInclude Include="include\user_input.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
