@@ -53,6 +53,7 @@ void socket_initializer::CreateUdpSendSocket(const int& port, const std::string&
   udp_sockets[i].m_send_sock_addr.sin_port = htons(port);
   udp_sockets[i].m_send_sock_addr.sin_addr.s_addr = inet_addr(ip_address.c_str());
   memset(&(udp_sockets[i].m_send_sock_addr.sin_zero), 0, sizeof(udp_sockets[i].m_send_sock_addr));
+  logger::Log(sizeof(udp_sockets[i].m_send_sock_addr));
 }
 
 

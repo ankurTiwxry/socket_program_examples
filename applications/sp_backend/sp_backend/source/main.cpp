@@ -1,6 +1,7 @@
 #include "../include/logging.h"
 #include "../include/socket_initializer.h"
 #include "../include/network_services.h"
+#include "../include/ui_service.h"
 #include "../include/user_input.h"
 
 #include <iostream>
@@ -15,14 +16,15 @@ void ServicesLooper(network_services& nws) {
   logger::Log("Starting services...");
 
   while (1) {
-    // terminate loop
+    // terminate loop condition check
     if (m_break_condition) {
       break;
     }
-
     // Prepare console display 
     logger::LogSpace();
     logger::Log("Waiting for a new command...");
+
+    // Perform tasks
     
   }
 }

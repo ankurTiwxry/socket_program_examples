@@ -22,7 +22,7 @@ static void LogInline(const T& msg) {
 // Log and move to the next line
 template<typename T>
 static void Log(const T& msg) {
-  std::cout << msg << std::endl;
+  std::cout << msg << '\n';
 }
 
 // Check if return value is valid for socket functions ---------------------------------------------
